@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <h1>应用1介绍页</h1>
+    <h1>系统A:应用1介绍页</h1>
   </div>
 </template>
 <script>
