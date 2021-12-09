@@ -1,6 +1,6 @@
 <template>
   <h1 class="home">
-    应用1首页
+    系统A:应用1首页
   </h1>
 </template>
 

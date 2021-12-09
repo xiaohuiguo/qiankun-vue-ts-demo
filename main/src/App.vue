@@ -1,42 +1,24 @@
 <template>
   <div class="home-container">
-    <!--主应用非控制台页面展示区：比如登录注册-->
-    <router-view v-if="status.page === 'full'"></router-view>
+    <!--主应用非控制台页面展示区：比如登录-->
+    <router-view v-if="status.viewType === 'full'"></router-view>
     <!--控制台页面展示区-->
-    <div style="width: 100%;height: 100%;" v-show="status.page !== 'full'">
+    <div style="width: 100%;height: 100%;" v-show="status.viewType !== 'full'">
       <div class="home-header box">
-        <header-nav></header-nav>
+        <header-nav :menuType=status.menuType></header-nav>
       </div>
       <div class="home-content box">
         <div class="home-nav">
           <ul class="nav-menu-admin">
-            <li class="nav-menu-item" @click="skip('/home')">
-              <span slot="title">首页</span>
-            </li>
-            <li class="nav-menu-item" @click="skip('/about')">
-              <span slot="title">介绍页</span>
-            </li>
-            <li class="nav-menu-item" @click="skip('/hello-world')">
-              <span slot="title">初始页</span>
-            </li>
-            <li class="nav-menu-item" @click="skip('/subone/about')">
-              <span slot="title">子应用1介绍页</span>
-            </li>
-            <li class="nav-menu-item" @click="skip('/subone/home')">
-              <span slot="title">子应用1首页</span>
-            </li>
-            <li class="nav-menu-item" @click="skip('/subtwo/about')">
-              <span slot="title">子应用2介绍页</span>
-            </li>
-            <li class="nav-menu-item" @click="skip('/subtwo/home')">
-              <span slot="title">子应用2首页</span>
+            <li class="nav-menu-item" v-for="(item, i) in navActive" @click="skip(item.path)">
+              <span slot="title">{{item.name}}</span>
             </li>
           </ul>
         </div>
-        <!--子应用页面展示区-->
-        <div id="subapp-viewport" class="flex" v-show="status.page === 'son'"></div>
         <!--主应用页面展示区-->
-        <router-view v-show="status.page === 'main'"></router-view>
+        <router-view v-show="status.viewType === 'control_main'"></router-view>
+        <!--子应用页面展示区-->
+        <div id="subapp-viewport" class="flex" v-show="status.viewType === 'control_sub'"></div>
       </div>
     </div>
   </div>
@@ -52,52 +34,82 @@
     @Component({
         components: {
             HeaderNav
-        },
+        }
     })
-
     export default class App extends Vue {
         $router: any;
+        private $route: any;
         private isLoading: boolean = true;
-        private current: string = '/resource/';
         private $window: any;
         private user: any = {
             email: 'admin'
         };
 
         private status: any = {
-            page: 'main', // 页面属性 {String} -- main:控制台主项目|son:控制台子项目 | full:非控制台部分
-            menuType: 'main' // 导航类型 {String} -- main:主项目（运营管理）| subone:子应用1| subtwo:子应用2
+            viewType: 'control_main', // 页面视图类型 {String} --full:非控制台部分| control_main:控制台主应用|control_sub:控制台子应用；用于控制试图展示区切换 
+            menuType: 'sysA' // 导航类型 {String} -- sysA:系统A| sysB:系统B；用于控制左侧菜单切换
         }
 
+        private nav: any = {
+            sysA: [
+              {
+                name:'总览页',
+                path:'/gernal'
+              },
+              {
+                name:'子应用1首页',
+                path:'/subone/home'
+              },
+              {
+                name:'子应用1介绍页',
+                path:'/subone/about'
+              },
+            ], 
+            sysB: [
+              {
+                name:'子应用2首页',
+                path:'/subtwo/home'
+              },
+              {
+                name:'子应用2介绍页',
+                path:'/subtwo/about'
+              }
+            ] 
+        };
+        private navActive:any = [];
+
+        
+
         @Watch('$route') changeRoute(to: any, from: any) {
+            this.navActive = this.nav[this.status.menuType];
             console.log(to, from)
             let menuType = to.path.split('/')[1];
             this.filterMenu(to);
             this.getPageStatus(menuType);
         }
 
-        /**整理导航显示 */
+        /**重置头部导航/侧栏菜单显示 */
         private filterMenu(route: any) {
             let menuType = route.path.split('/')[1];
             switch (menuType) {
-                case 'subone':
                 case 'subtwo':
-                    this.status.menuType = menuType;
+                    this.status.menuType = 'sysB';
                     break;
                 default:
-                    this.status.menuType = 'main';
+                    this.status.menuType = 'sysA';
                     break;
             }
+            this.navActive = this.nav[this.status.menuType];
         }
-        /*检查容器显示情况*/ 
+        /*重置容器显示情况*/ 
         private getPageStatus(index: any) {
           console.log(index)
-            if (['', 'login'].indexOf(index) > -1) {
-                this.status.page = "full";
-            } else if ([ 'about', 'home', 'hello-world'].indexOf(index) > -1) {
-                this.status.page = "main"
+            if (['login'].indexOf(index) > -1) {
+                this.status.viewType = "full";
+            } else if ([ 'gernal'].indexOf(index) > -1) {
+                this.status.viewType = "control_main"
             } else {
-                this.status.page = "son"
+                this.status.viewType = "control_sub"
             }
             this.$forceUpdate();
         }
@@ -106,19 +118,12 @@
           this.$router.push(url);
         }
 
-
-        private created() {
-        }
-
         private mounted() {
             /**整理页面 */
             let menuType = this.$route.path.split('/')[1];
             this.getPageStatus(menuType);
-        }
-
-        /**导航栏横向变动回调 */
-        private indentChange($event: any) {
-            this.status.headerIndent = $event ? '60' : '190';
+            /**整理导航 */
+            this.filterMenu(this.$route);
         }
     }
 </script>

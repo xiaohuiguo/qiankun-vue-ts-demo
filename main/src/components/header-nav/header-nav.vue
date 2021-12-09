@@ -1,20 +1,23 @@
 <template>
 	<div class="header-container">
 		<div class="header-logo">
-			<img src="../../assets/logo.png" alt="专属云">
+			<img src="https://gw.alipayobjects.com/zos/bmw-prod/8a74c1d3-16f3-4719-be63-15e467a68a24/km0cv8vn_w500_h500.png" alt="">
 		</div>
 		<div class="header-info">
-			<div class="header-info-left">
-				<div class="efly-popover nav-top-title" style="width: 230px;text-align: left;margin-right: 20px;cursor: pointer;justify-content:flex-start;">
-					<div class="sys-change-ul-outer" style="height: 100%;display:flex;align-items:center">
-						<span class="font-normal"><i class="icon icon-css icon-menu nav-top-title-menu "></i></span>
+			<div class="header-info-left flex">
+				<div class="efly-popover">
+					<div class="header-exit sys-tabs">
+						系统切换：
+						<span class="sys-tab" :class="{'active-sys': menuType ==='sysA'}" @click="skip('/gernal')">系统A</span>
+						<span class="sys-tab" :class="{'active-sys': menuType ==='sysB'}" @click="skip('/subtwo/home')">系统B</span>
 					</div>
 				</div>
 			</div>
 			<div class="header-info-right flex">
 				<div class="efly-popover">
 					<div class="header-exit">
-						<span>admin</span>
+						<span class="login-tab">admin</span>
+						<span class="login-tab" @click="skip('/login')">退出</span>
 					</div>
 				</div>
 			</div>
@@ -24,12 +27,12 @@
 
 <script>
     import HeaderNav from './header-nav';
-
     export default HeaderNav;
 </script>
 
 <style lang="scss" scoped>
 	.flex{display: flex;}
+	.active-sys{color: #009FEF;}
 	.header-container {
 		display: box!important;
 		display: flex!important;
@@ -66,7 +69,15 @@
 	.header-container .header-info .header-info-right {
 		height: 100%;
 	}
-	
+
+	.sys-tabs{
+		font-weight: bold;
+	}
+	.login-tab,
+	.sys-tab{
+		padding: 0 10px;
+		cursor: pointer;
+	}
 	.nav-top-title {
 		margin-left: 20px;
 		position: relative;

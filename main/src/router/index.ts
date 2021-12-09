@@ -11,19 +11,18 @@ Router.prototype.push = function push (to:any) {
 
 const routes = [
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('../views/About.vue')
+        path: '/',
+        redirect: 'gernal'
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: () => import('../views/Home.vue')
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login.vue')
   },
   {
-    path: '/hello-world',
-    name: 'HelloWorld',
-    component: () => import('../components/hello-world/hello-world.vue')
+    path: '/gernal',
+    name: 'Gernal',
+    component: () => import('../views/Gernal.vue')
   }
 ]
 
