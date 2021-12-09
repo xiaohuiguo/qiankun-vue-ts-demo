@@ -38,7 +38,6 @@
     })
     export default class App extends Vue {
         $router: any;
-        private $route: any;
         private isLoading: boolean = true;
         private $window: any;
         private user: any = {
