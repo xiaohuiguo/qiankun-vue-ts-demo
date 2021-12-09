@@ -1,24 +1,10 @@
 # qiankun-main
 
-## Project setup
-```
-yarn install
-```
+#### 主应用启动
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+```javascript
 
-### Compiles and minifies for production
-```
-yarn build
-```
+npm install
 
-### Lints and fixes files
+npm run serve
 ```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

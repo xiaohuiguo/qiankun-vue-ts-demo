@@ -1,24 +1,8 @@
-# subone
+#### 子应用1启动
 
-## Project setup
-```
-yarn install
-```
+```javascript
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+npm install
 
-### Compiles and minifies for production
+npm run serve
 ```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
